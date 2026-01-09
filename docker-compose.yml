@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: python_web_serwis
+    container_name: python-app
+    restart: always
+    expose:
+      - "8080"
+    networks:
+      - lab-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - lab-network
+
+networks:
+  lab-network:
+    driver: bridge
